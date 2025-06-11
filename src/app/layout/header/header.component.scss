@@ -1,0 +1,25 @@
+.header{
+    border-style: solid;
+    border-color: grey;
+    border-width: 2px;
+    padding: 5px;
+}
+
+.headerContent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+}
+
+.headerNav{
+    display: flex;
+    flex-direction: row;
+    text-transform: uppercase;
+}
+
+.headerLink{
+    margin: 10px;
+    font-size: 25px;
+}

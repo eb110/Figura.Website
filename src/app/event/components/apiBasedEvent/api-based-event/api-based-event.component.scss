@@ -1,0 +1,70 @@
+
+
+table {
+    width: 100%;
+}
+
+table,th,td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    border-color: grey;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+// th,td{
+//     height: 2em;
+// }
+
+thead{
+    background-color: aquamarine;
+}
+
+.action-td{
+    //width: 8%;
+}
+
+.i-edit-undo {
+    color: #0747a6;
+    font-size: 1.6em;
+    margin: 2px;
+}
+
+.i-save {
+    color: #da1926;
+    font-size: 1.6em;
+    margin: 2px;
+}
+
+.table-container{
+    margin: 20px;
+}
+
+input{
+    // height: 1.6em;
+    // text-align: center;
+}
+
+option, select{
+
+}
+
+.tableDiv{
+    //min-height: 100px;
+}
+
+.inputPicker{
+
+}
+
+.select-nationality, .select-name{
+    height: 31px;
+}
+
+.input-surname, .input-result{
+    line-height: 27px;
+    padding: 0px;
+    padding-block: 0px;
+    padding-inline: 0px;
+}

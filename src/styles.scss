@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+
+:root {
+    @include mat.datepicker-overrides((
+            //calendar-body-label-text-color: orange,
+            //calendar-container-background-color: rgba(190, 187, 187),
+        ));
+          @include mat.form-field-overrides((
+    container-height: 50px,
+    container-vertical-padding: 0px,
+    filled-with-label-container-padding-top: 0px,
+    filled-with-label-container-padding-bottom: 0px
+
+  ));
+}
+
+body {
+    --main-font: Calibri, 'Open Sans', 'Roboto', sans-serif;
+    --header-font: Calibri, serif;
+
+    margin: 0;
+    min-height: 100vh;
+
+    font-size: 16px;
+    font-family: var(--main-font);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

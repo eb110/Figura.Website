@@ -1,0 +1,108 @@
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Nationality</th>
+                <th>DoB</th>
+                <th>Result</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(riderStat of ridersStats; track riderStat.riderStartingNumber){
+            <tr>
+                <td>{{riderStat.riderStartingNumber}}</td>
+                <td>
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                        <select class="select-name" [(ngModel)]="riderStat.rider.name">
+                            @for(firstName of firstNames; track firstName.name){
+                            <option value={{firstName.name}}>{{firstName.name}}</option>
+                            }
+                        </select>
+                    </div>
+                    }
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        {{riderStat.rider.name}}
+                    </div>
+                    }
+                </td>
+                <td>
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                        <input class="input-surname" type="text" [(ngModel)]="riderStat.rider.surname">
+                    </div>
+                    }
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        {{riderStat.rider.surname}}
+                    </div>
+                    }
+                </td>
+                <td>
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                        <select class="select-nationality" [(ngModel)]="riderStat.rider.nationality">
+                            @for(country of countries; track country.name){
+                            <option value={{country.name}}>{{country.name}}</option>
+                            }
+                        </select>
+                    </div>
+                    }
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        {{riderStat.rider.nationality}}
+                    </div>
+                    }
+                </td>
+                <td>
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                       <mat-form-field class="datePicker">
+                            <mat-label>Birthday</mat-label>
+                            <input matInput [matDatepicker]="picker" (dateChange)="dateChange(riderStat, $event)">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    }
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        {{riderStat.rider.doB}}
+                    </div>
+                    }
+                </td>
+                <td>
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                        <input class="input-result" type="text" [(ngModel)]="riderStat.riderResults">
+                    </div>
+                    }
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        {{riderStat.riderResults}}
+                    </div>
+                    }
+                </td>
+                <td class="action-td">
+                    @if(!riderStat.isEdit){
+                    <div class="tableDiv">
+                        <i class="fa fa-pencil-square-o i-edit-undo" aria-hidden="true" (click)="onEdit(riderStat)"></i>
+                    </div>
+                    }
+                    @if(riderStat.isEdit){
+                    <div class="tableDiv">
+                        <i class="fa fa-floppy-o i-save" aria-hidden="true" (click)="onSave(riderStat)"></i>
+                        <i class="fa fa-undo i-edit-undo" aria-hidden="true" (click)="onCancel(riderStat)"></i>
+                    </div>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
