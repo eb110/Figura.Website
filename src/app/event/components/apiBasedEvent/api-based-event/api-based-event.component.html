@@ -14,8 +14,8 @@
         <tbody>
             @for(riderStat of ridersStats; track riderStat.riderStartingNumber){
             <tr>
-                <td>{{riderStat.riderStartingNumber}}</td>
-                <td>
+                <td class="number-td">{{riderStat.riderStartingNumber}}</td>
+                <td class="name-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
                         <select class="select-name" [(ngModel)]="riderStat.rider.name">
@@ -31,19 +31,12 @@
                     </div>
                     }
                 </td>
-                <td>
-                    @if(riderStat.isEdit){
-                    <div class="tableDiv">
-                        <input class="input-surname" type="text" [(ngModel)]="riderStat.rider.surname">
-                    </div>
-                    }
-                    @if(!riderStat.isEdit){
+                <td class="surname-td">
                     <div class="tableDiv">
                         {{riderStat.rider.surname}}
                     </div>
-                    }
                 </td>
-                <td>
+                <td class="nationality-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
                         <select class="select-nationality" [(ngModel)]="riderStat.rider.nationality">
@@ -59,15 +52,10 @@
                     </div>
                     }
                 </td>
-                <td>
+                <td class="dob-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                       <mat-form-field class="datePicker">
-                            <mat-label>Birthday</mat-label>
-                            <input matInput [matDatepicker]="picker" (dateChange)="dateChange(riderStat, $event)">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
-                        </mat-form-field>
+                        <input class="input-dob" type="text" [(ngModel)]="riderStat.rider.doB">
                     </div>
                     }
                     @if(!riderStat.isEdit){
@@ -76,7 +64,7 @@
                     </div>
                     }
                 </td>
-                <td>
+                <td class="result-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
                         <input class="input-result" type="text" [(ngModel)]="riderStat.riderResults">
