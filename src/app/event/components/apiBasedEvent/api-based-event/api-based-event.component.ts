@@ -1,11 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {MatDatepickerInputEvent, MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { EventService } from '../../../service/event.service';
 import { IRiderStats } from '../../../../shared/interfaces/riderStats';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import lodash from 'lodash';
 import { NetworkService } from '../../../../network/service/network.service';
 import { IFirstName } from '../../../../network/interfaces/firstName';
@@ -13,13 +10,11 @@ import { ICountry } from '../../../../network/interfaces/country';
 
 @Component({
   selector: 'app-api-based-event',
-  providers: [provideNativeDateAdapter()],
   imports: [
-    FormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule
+    FormsModule
   ],
   templateUrl: './api-based-event.component.html',
   styleUrl: './api-based-event.component.scss',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApiBasedEventComponent implements OnInit {
 
@@ -33,7 +28,7 @@ export class ApiBasedEventComponent implements OnInit {
 
   firstNames: IFirstName[] = [];
   countries: ICountry[] = [];
-  
+
   ngOnInit(): void {
 
     this.eventService.getBasedApiLinkEvent().subscribe({
@@ -46,31 +41,39 @@ export class ApiBasedEventComponent implements OnInit {
       error: error => console.log(error)
     });
 
-     this.networkService.getAllFirstNames().subscribe({
+    this.networkService.getAllFirstNames().subscribe({
       next: response => this.firstNames = response,
       error: error => console.log(error)
     });
 
   }
 
-  onEdit(rs:IRiderStats){
+  onEdit(rs: IRiderStats) {
+    if(this.ridersStats.some(x => x.isEdit == true)){
+      this.ridersStats = lodash.cloneDeep(this.oldRidersStats);
+    }
+    this.ridersStats.forEach(element => {
+      if (element.riderStartingNumber != rs.riderStartingNumber) {
+        element.isEdit = false;
+      }
+      else{
+        element.isEdit = true;
+      }
+    });
     this.oldRidersStats = lodash.cloneDeep(this.ridersStats);
-    rs.isEdit = true;
   }
 
-  onSave(rs:IRiderStats){
+  onSave(rs: IRiderStats) {
     console.log('save state: ', rs)
     rs.isEdit = false;
   }
 
-  onCancel(rs:IRiderStats){
-    rs.isEdit = false;
+  onCancel(rs: IRiderStats) {
     this.ridersStats = lodash.cloneDeep(this.oldRidersStats)
+    this.ridersStats.forEach(element => {
+      if (element.riderStartingNumber == rs.riderStartingNumber) {
+        element.isEdit = false;
+      }
+    })
   }
-
-  dateChange(rs:IRiderStats, event: MatDatepickerInputEvent<Date>){
-    let isostring = event.value ? event.value : new Date();
-    rs.rider.doB = isostring.toLocaleDateString('sv-SE');
-  }
-
 }

@@ -1,5 +1,3 @@
-
-
 table {
     width: 100%;
 }
@@ -13,16 +11,8 @@ table,th,td {
     margin-bottom: auto;
 }
 
-// th,td{
-//     height: 2em;
-// }
-
 thead{
     background-color: aquamarine;
-}
-
-.action-td{
-    //width: 8%;
 }
 
 .i-edit-undo {
@@ -41,30 +31,53 @@ thead{
     margin: 20px;
 }
 
-input{
-    // height: 1.6em;
-    // text-align: center;
-}
-
-option, select{
-
-}
-
-.tableDiv{
-    //min-height: 100px;
-}
-
-.inputPicker{
-
-}
-
-.select-nationality, .select-name{
+.action-td{
+    width: 115px;
     height: 31px;
 }
 
-.input-surname, .input-result{
-    line-height: 27px;
+.number-td{
+    width: 115px;
+    height: 31px;
+}
+
+.name-td{
+    width: 276px;
+    height: 31px;
+}
+
+.select-nationality, .select-name{
+    height: 29px;
+    width: 130px;
+    font-size: 1.1em;
+}
+
+.input-result, .input-dob{
+    line-height: 26px;
+    width: 130px;
     padding: 0px;
     padding-block: 0px;
     padding-inline: 0px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.surname-td{
+    width: 276px;
+    height: 31px;
+}
+
+.nationality-td{
+    width: 276px;
+    height: 31px;
+}
+
+.dob-td{
+    width: 276px;
+    height: 31px;
+}
+
+.result-td{
+    width: 276px;
+    height: 31px;
 }
