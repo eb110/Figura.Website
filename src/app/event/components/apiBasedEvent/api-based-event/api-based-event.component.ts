@@ -14,15 +14,14 @@ import { ICountry } from '../../../../network/interfaces/country';
   ],
   templateUrl: './api-based-event.component.html',
   styleUrl: './api-based-event.component.scss',
+  standalone: true,
 })
 export class ApiBasedEventComponent implements OnInit {
 
-  constructor(private eventService: EventService, private networkService: NetworkService){}
+  constructor(private eventService: EventService, private networkService: NetworkService) { }
 
   //private eventService = inject(EventService);
   //private networkService = inject(NetworkService);
-
-  readonly startDate = new Date(1960, 0, 1);
 
   ridersStats: IRiderStats[] = [];
   oldRidersStats: IRiderStats[] = [];
@@ -31,32 +30,40 @@ export class ApiBasedEventComponent implements OnInit {
   countries: ICountry[] = [];
 
   ngOnInit(): void {
+    this.getApiBasedLinkEvents();
+    this.getCountries();
+    this.getFirstNames();
+  }
 
+  getApiBasedLinkEvents() {
     this.eventService.getBasedApiLinkEvent(JSON.stringify('test')).subscribe({
       next: response => this.ridersStats = response,
       error: error => console.log(error),
     });
+  }
 
+  getCountries() {
     this.networkService.getAllCountries().subscribe({
       next: response => this.countries = response
     });
+  }
 
+  getFirstNames() {
     this.networkService.getAllFirstNames().subscribe({
       next: response => this.firstNames = response,
       error: error => console.log(error)
     });
-
   }
 
   onEdit(rs: IRiderStats) {
-    if(this.ridersStats.some(x => x.isEdit == true)){
+    if (this.ridersStats.some(x => x.isEdit == true)) {
       this.ridersStats = lodash.cloneDeep(this.oldRidersStats);
     }
     this.ridersStats.forEach(element => {
       if (element.riderStartingNumber != rs.riderStartingNumber) {
         element.isEdit = false;
       }
-      else{
+      else {
         element.isEdit = true;
       }
     });
