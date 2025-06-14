@@ -4,7 +4,7 @@ import { RiderService } from './rider.service';
 
 describe('RiderService', () => {
   let service: RiderService;
-    let httpClientSpy: any;
+  let httpClientSpy: any;
 
   beforeEach(() => {
     httpClientSpy = {

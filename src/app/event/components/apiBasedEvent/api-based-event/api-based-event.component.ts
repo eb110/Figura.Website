@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { EventService } from '../../../service/event.service';
 import { IRiderStats } from '../../../../shared/interfaces/riderStats';
 import { FormsModule } from '@angular/forms';
@@ -18,8 +17,10 @@ import { ICountry } from '../../../../network/interfaces/country';
 })
 export class ApiBasedEventComponent implements OnInit {
 
-  private eventService = inject(EventService);
-  private networkService = inject(NetworkService);
+  constructor(private eventService: EventService, private networkService: NetworkService){}
+
+  //private eventService = inject(EventService);
+  //private networkService = inject(NetworkService);
 
   readonly startDate = new Date(1960, 0, 1);
 
@@ -31,14 +32,13 @@ export class ApiBasedEventComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.eventService.getBasedApiLinkEvent().subscribe({
+    this.eventService.getBasedApiLinkEvent(JSON.stringify('test')).subscribe({
       next: response => this.ridersStats = response,
       error: error => console.log(error),
     });
 
     this.networkService.getAllCountries().subscribe({
-      next: response => this.countries = response,
-      error: error => console.log(error)
+      next: response => this.countries = response
     });
 
     this.networkService.getAllFirstNames().subscribe({

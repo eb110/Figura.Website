@@ -18,7 +18,7 @@ export class EventService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
 
-  getBasedApiLinkEvent(): Observable<IRiderStats[]>{
-    return this.http.post<IRiderStats[]>(this.baseUrl + 'SpeedwayEvent', JSON.stringify('test'), this.httpOptions)
+  getBasedApiLinkEvent(data: any): Observable<IRiderStats[]>{
+    return this.http.post<IRiderStats[]>(this.baseUrl + 'SpeedwayEvent', data, this.httpOptions)
   }
 }

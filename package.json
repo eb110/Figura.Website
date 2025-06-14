@@ -47,10 +47,15 @@
       "<rootDir>/dist/"
     ],
     "globals": {
-      "ts-jest": {
-        "tsConfig": "<rootDir>/tsconfig.spec.json",
-        "stringifyContentPathRegex": "\\.html$"
-      }
+      "transform": {
+        "tsconfig": [
+          "ts-jest",
+          {
+            "tsConfig": "<rootDir>/tsconfig.spec.json",
+            "stringifyContentPathRegex": "\\.html$"
+          }
+        ]
+      }   
     }
   }
 }
