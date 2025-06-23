@@ -7,13 +7,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NetworkService } from '../../../../network/service/network.service';
 import { IFirstName } from '../../../../network/interfaces/firstName';
 import { EventService } from '../../../service/event.service';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ApiBasedEventComponent', () => {
-  //let component: ApiBasedEventComponent;
-  //let fixture: ComponentFixture<ApiBasedEventComponent>;
-  let fixture: ApiBasedEventComponent;
-  let networkServiceSpy: any;
-  let eventServiceSpy: any;
+
+  let component: ApiBasedEventComponent;
+  let fixture: ComponentFixture<ApiBasedEventComponent>;
+
+  let networkServiceMock: any;
+  let eventServiceMock: any;
 
   const rider1 = { id: 'test', name: 'test', surname: 'test', nationality: 'test', doB: 'test', pictureUrl: 'test' } as IRider;
   const rider2 = { id: 'test2', name: 'test2', surname: 'test2', nationality: 'test2', doB: 'test2', pictureUrl: 'test2' } as IRider;
@@ -25,66 +28,79 @@ describe('ApiBasedEventComponent', () => {
   const country2 = { id: 'test2', name: 'test2', flagPictureUrl: 'test2' } as ICountry
   const countries = [country1, country2] as ICountry[];
 
-  const name1 = {id: 'test', name: 'test'} as IFirstName;
-  const name2 = {id: 'test2', name: 'test2'} as IFirstName;
+  const name1 = { id: 'test', name: 'test' } as IFirstName;
+  const name2 = { id: 'test2', name: 'test2' } as IFirstName;
   const names = [name1, name2] as IFirstName[];
 
-  beforeEach(() => {
-    networkServiceSpy = {
+  beforeEach(async () => {
+
+    networkServiceMock = {
       getAllCountries: jest.fn(),
-      getAllFirstNames: jest.fn()
+      getAllFirstNames: jest.fn(),
     };
 
-    eventServiceSpy = {
+    eventServiceMock = {
       getBasedApiLinkEvent: jest.fn()
     }
 
-    fixture = new ApiBasedEventComponent(eventServiceSpy, networkServiceSpy);
+    await TestBed.configureTestingModule({
+      imports: [ApiBasedEventComponent],
+      providers: [
+        { provide: NetworkService, useValue: networkServiceMock },
+        { provide: EventService, useValue: eventServiceMock },
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
+    }).compileComponents();
+
+    TestBed.inject(NetworkService);
+    TestBed.inject(EventService);
+
+    jest.spyOn(networkServiceMock, 'getAllCountries').mockReturnValue(of(countries));
+    jest.spyOn(networkServiceMock, 'getAllFirstNames').mockReturnValue(of(names));
+    jest.spyOn(eventServiceMock, 'getBasedApiLinkEvent').mockReturnValue(of(eventStats));
+
+    fixture = TestBed.createComponent(ApiBasedEventComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   })
 
-  // beforeEach(async () => {
-  //   networkServiceSpy = {
-  //     getAllCountries: jest.fn(),
-  //     getAllFirstNames: jest.fn()
-  //   }
-  //   eventServiceSpy = {
-  //     getBasedApiLinkEvent: jest.fn()
-  //   }
-
-  //   await TestBed.configureTestingModule({
-  //     declarations: [ ApiBasedEventComponent ],
-  //     providers: [
-  //       {
-  //         provide: NetworkService, useValue: networkServiceSpy,
-  //       },
-  //              {
-  //         provide: EventService, useValue: networkServiceSpy,
-  //       }
-  //     ],
-  //   })
-  //   .compileComponents();
-  // });
-
-  // beforeEach(() => {
-  //   fixture = TestBed.createComponent(ApiBasedEventComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-  // })
-
   it('should create', () => {
-    expect(fixture).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('test component', () => {
-    jest.spyOn(networkServiceSpy, 'getAllCountries').mockReturnValue(of(countries));
-    jest.spyOn(networkServiceSpy, 'getAllFirstNames').mockReturnValue(of(names));
-    jest.spyOn(eventServiceSpy, 'getBasedApiLinkEvent').mockReturnValue(of(eventStats));
+  it('should render events table', () => {
+    let componentTables = fixture.nativeElement.querySelectorAll('table')
+    expect(componentTables[0].id).toEqual('events-table-id')
+  });
 
-    fixture.getCountries();
+  it('test component fetched data', () => {
+    expect(networkServiceMock.getAllCountries).toHaveBeenCalledTimes(1);
+    expect(networkServiceMock.getAllFirstNames).toHaveBeenCalledTimes(1);
+    expect(eventServiceMock.getBasedApiLinkEvent).toHaveBeenCalledTimes(1);
+    expect(component.countries.length).toBeGreaterThan(0);
+    expect(component.firstNames.length).toBeGreaterThan(0);
+    expect(component.ridersStats.length).toBeGreaterThan(0);
+  })
 
-    console.log('component: ', fixture)
+  it('test edit click', () => {
+    let firstStatEdit = fixture.nativeElement.querySelectorAll('i')[0]
+    firstStatEdit.click();
+    expect(component.ridersStats.filter(x => x.isEdit == true).length).toEqual(1)
+  })
 
-
-    expect(fixture.countries.length).toBeGreaterThan(0);
+  it('test edit cancel', () => {
+    eventStats[0].isEdit = true;
+    fixture.detectChanges()
+    let allIcons = fixture.nativeElement.querySelectorAll('i');
+    let cancelEdit = [] as any
+    allIcons.forEach((icon: HTMLElement) => {
+      if(icon.id == 'edit-cancel'){
+      cancelEdit.push(icon)
+    }
+    })
+    let statCancel = cancelEdit[0]
+    statCancel.click();
+    expect(component.ridersStats.filter(x => x.isEdit == false).length).toEqual(0)
   })
 });
