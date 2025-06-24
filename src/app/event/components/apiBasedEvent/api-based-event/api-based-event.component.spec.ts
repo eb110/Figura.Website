@@ -9,6 +9,8 @@ import { IFirstName } from '../../../../network/interfaces/firstName';
 import { EventService } from '../../../service/event.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import lodash from 'lodash';
+import { By } from '@angular/platform-browser';
 
 describe('ApiBasedEventComponent', () => {
 
@@ -56,9 +58,13 @@ describe('ApiBasedEventComponent', () => {
     TestBed.inject(NetworkService);
     TestBed.inject(EventService);
 
-    jest.spyOn(networkServiceMock, 'getAllCountries').mockReturnValue(of(countries));
-    jest.spyOn(networkServiceMock, 'getAllFirstNames').mockReturnValue(of(names));
-    jest.spyOn(eventServiceMock, 'getBasedApiLinkEvent').mockReturnValue(of(eventStats));
+    const copyEventStats = lodash.cloneDeep(eventStats)
+    const copyCountries = lodash.cloneDeep(countries)
+    const copyNames = lodash.cloneDeep(names)
+
+    jest.spyOn(networkServiceMock, 'getAllCountries').mockReturnValue(of(copyCountries));
+    jest.spyOn(networkServiceMock, 'getAllFirstNames').mockReturnValue(of(copyNames));
+    jest.spyOn(eventServiceMock, 'getBasedApiLinkEvent').mockReturnValue(of(copyEventStats));
 
     fixture = TestBed.createComponent(ApiBasedEventComponent);
     component = fixture.componentInstance;
@@ -71,6 +77,7 @@ describe('ApiBasedEventComponent', () => {
 
   it('should render events table', () => {
     let componentTables = fixture.nativeElement.querySelectorAll('table')
+
     expect(componentTables[0].id).toEqual('events-table-id')
   });
 
@@ -86,21 +93,63 @@ describe('ApiBasedEventComponent', () => {
   it('test edit click', () => {
     let firstStatEdit = fixture.nativeElement.querySelectorAll('i')[0]
     firstStatEdit.click();
+
     expect(component.ridersStats.filter(x => x.isEdit == true).length).toEqual(1)
   })
 
   it('test edit cancel', () => {
-    eventStats[0].isEdit = true;
+    let firstStatEdit = fixture.nativeElement.querySelectorAll('i')[0]
+    firstStatEdit.click();
+
+    expect(component.ridersStats.filter(x => x.isEdit == true).length).toEqual(1)
+
+    //refresh component with current component state - NOT initial state!!!
     fixture.detectChanges()
+
     let allIcons = fixture.nativeElement.querySelectorAll('i');
     let cancelEdit = [] as any
     allIcons.forEach((icon: HTMLElement) => {
-      if(icon.id == 'edit-cancel'){
-      cancelEdit.push(icon)
-    }
+      if (icon.id == 'edit-cancel') {
+        cancelEdit.push(icon)
+      }
     })
     let statCancel = cancelEdit[0]
     statCancel.click();
-    expect(component.ridersStats.filter(x => x.isEdit == false).length).toEqual(0)
+
+    expect(component.ridersStats.filter(x => x.isEdit == false).length).toEqual(component.ridersStats.length)
+  })
+
+  it('test select name then cancel', () => {
+    let firstStatEdit = fixture.nativeElement.querySelectorAll('i')[0]
+    firstStatEdit.click();
+    fixture.detectChanges();
+    let allSelects = fixture.nativeElement.querySelectorAll('select');
+    let select = allSelects[0];
+
+    expect(select.id).toEqual('select-name-id')
+
+    //click select
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    let allOptions = fixture.nativeElement.querySelectorAll('option');
+    let name1 = allOptions[0];
+    let name2 = allOptions[1];
+    
+    expect(name1.value).toEqual('test');
+    expect(name2.value).toEqual('test2');
+
+    //click option
+    name1.click();
+    fixture.detectChanges();
+    let allIcons = fixture.nativeElement.querySelectorAll('i');
+    let cancel = allIcons[1]
+
+    expect(cancel.id).toEqual('edit-cancel')
+
+    cancel.click();
+    fixture.detectChanges();
+    let riderName = component.ridersStats[0].rider.name;
+
+    expect(riderName).toEqual(eventStat1.rider.name);
   })
 });

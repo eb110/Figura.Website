@@ -18,15 +18,15 @@
                 <td class="name-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                        <select class="select-name" [(ngModel)]="riderStat.rider.name">
+                        <select class="select-name" id="select-name-id" [(ngModel)]="riderStat.rider.name">
                             @for(firstName of firstNames; track firstName.name){
-                            <option value={{firstName.name}}>{{firstName.name}}</option>
+                            <option id="option-name-id" value={{firstName.name}}>{{firstName.name}}</option>
                             }
                         </select>
                     </div>
                     }
                     @if(!riderStat.isEdit){
-                    <div class="tableDiv">
+                    <div id="rider-name-div" class="tableDiv">
                         {{riderStat.rider.name}}
                     </div>
                     }
@@ -39,9 +39,9 @@
                 <td class="nationality-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                        <select class="select-nationality" [(ngModel)]="riderStat.rider.nationality">
+                        <select class="select-nationality" id="select-nationality" [(ngModel)]="riderStat.rider.nationality">
                             @for(country of countries; track country.name){
-                            <option value={{country.name}}>{{country.name}}</option>
+                            <option id="option-nationality" value={{country.name}}>{{country.name}}</option>
                             }
                         </select>
                     </div>

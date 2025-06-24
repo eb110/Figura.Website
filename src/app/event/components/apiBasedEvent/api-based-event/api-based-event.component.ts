@@ -71,7 +71,6 @@ export class ApiBasedEventComponent implements OnInit {
   }
 
   onSave(rs: IRiderStats) {
-    console.log('save state: ', rs)
     rs.isEdit = false;
   }
 
