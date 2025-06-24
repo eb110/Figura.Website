@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { EventService } from '../../../service/event.service';
 import { IRiderStats } from '../../../../shared/interfaces/riderStats';
 import { FormsModule } from '@angular/forms';
@@ -15,13 +14,14 @@ import { ICountry } from '../../../../network/interfaces/country';
   ],
   templateUrl: './api-based-event.component.html',
   styleUrl: './api-based-event.component.scss',
+  standalone: true,
 })
 export class ApiBasedEventComponent implements OnInit {
 
-  private eventService = inject(EventService);
-  private networkService = inject(NetworkService);
+  constructor(private eventService: EventService, private networkService: NetworkService) { }
 
-  readonly startDate = new Date(1960, 0, 1);
+  //private eventService = inject(EventService);
+  //private networkService = inject(NetworkService);
 
   ridersStats: IRiderStats[] = [];
   oldRidersStats: IRiderStats[] = [];
@@ -30,33 +30,40 @@ export class ApiBasedEventComponent implements OnInit {
   countries: ICountry[] = [];
 
   ngOnInit(): void {
+    this.getApiBasedLinkEvents();
+    this.getCountries();
+    this.getFirstNames();
+  }
 
-    this.eventService.getBasedApiLinkEvent().subscribe({
+  getApiBasedLinkEvents() {
+    this.eventService.getBasedApiLinkEvent(JSON.stringify('test')).subscribe({
       next: response => this.ridersStats = response,
       error: error => console.log(error),
     });
+  }
 
+  getCountries() {
     this.networkService.getAllCountries().subscribe({
-      next: response => this.countries = response,
-      error: error => console.log(error)
+      next: response => this.countries = response
     });
+  }
 
+  getFirstNames() {
     this.networkService.getAllFirstNames().subscribe({
       next: response => this.firstNames = response,
       error: error => console.log(error)
     });
-
   }
 
   onEdit(rs: IRiderStats) {
-    if(this.ridersStats.some(x => x.isEdit == true)){
+    if (this.ridersStats.some(x => x.isEdit == true)) {
       this.ridersStats = lodash.cloneDeep(this.oldRidersStats);
     }
     this.ridersStats.forEach(element => {
       if (element.riderStartingNumber != rs.riderStartingNumber) {
         element.isEdit = false;
       }
-      else{
+      else {
         element.isEdit = true;
       }
     });
@@ -64,7 +71,6 @@ export class ApiBasedEventComponent implements OnInit {
   }
 
   onSave(rs: IRiderStats) {
-    console.log('save state: ', rs)
     rs.isEdit = false;
   }
 

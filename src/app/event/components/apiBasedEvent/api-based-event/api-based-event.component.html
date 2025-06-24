@@ -1,14 +1,14 @@
 <div class="table-container">
-    <table>
+    <table id="events-table-id">
         <thead>
             <tr>
-                <th>Number</th>
+                <th id="number">Number</th>
                 <th>Name</th>
                 <th>Surname</th>
                 <th>Nationality</th>
                 <th>DoB</th>
                 <th>Result</th>
-                <th>Action</th>
+                <th id="olo">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -18,15 +18,15 @@
                 <td class="name-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                        <select class="select-name" [(ngModel)]="riderStat.rider.name">
+                        <select class="select-name" id="select-name-id" [(ngModel)]="riderStat.rider.name">
                             @for(firstName of firstNames; track firstName.name){
-                            <option value={{firstName.name}}>{{firstName.name}}</option>
+                            <option id="option-name-id" value={{firstName.name}}>{{firstName.name}}</option>
                             }
                         </select>
                     </div>
                     }
                     @if(!riderStat.isEdit){
-                    <div class="tableDiv">
+                    <div id="rider-name-div" class="tableDiv">
                         {{riderStat.rider.name}}
                     </div>
                     }
@@ -39,9 +39,9 @@
                 <td class="nationality-td">
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                        <select class="select-nationality" [(ngModel)]="riderStat.rider.nationality">
+                        <select class="select-nationality" id="select-nationality" [(ngModel)]="riderStat.rider.nationality">
                             @for(country of countries; track country.name){
-                            <option value={{country.name}}>{{country.name}}</option>
+                            <option id="option-nationality" value={{country.name}}>{{country.name}}</option>
                             }
                         </select>
                     </div>
@@ -79,13 +79,13 @@
                 <td class="action-td">
                     @if(!riderStat.isEdit){
                     <div class="tableDiv">
-                        <i class="fa fa-pencil-square-o i-edit-undo" aria-hidden="true" (click)="onEdit(riderStat)"></i>
+                        <i class="fa fa-pencil-square-o i-edit-undo" id="edit-stat" aria-hidden="true" (click)="onEdit(riderStat)"></i>
                     </div>
                     }
                     @if(riderStat.isEdit){
                     <div class="tableDiv">
-                        <i class="fa fa-floppy-o i-save" aria-hidden="true" (click)="onSave(riderStat)"></i>
-                        <i class="fa fa-undo i-edit-undo" aria-hidden="true" (click)="onCancel(riderStat)"></i>
+                        <i class="fa fa-floppy-o i-save" id="edit-save" aria-hidden="true" (click)="onSave(riderStat)"></i>
+                        <i class="fa fa-undo i-edit-undo" id="edit-cancel" aria-hidden="true" (click)="onCancel(riderStat)"></i>
                     </div>
                     }
                 </td>
