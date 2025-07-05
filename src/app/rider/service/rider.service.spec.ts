@@ -21,7 +21,7 @@ describe('RiderService', () => {
     const rider1 = {id: 'test', name: 'test', surname: 'test', nationality: 'test', doB: 'test', pictureUrl: 'test'} as IRider
     const rider2 = {id: 'test2', name: 'test2', surname: 'test2', nationality: 'test2', doB: 'test2', pictureUrl: 'test2'} as IRider
     const res = [rider1, rider2] as IRider[];
-    const url = 'http://localhost:5000/Speedway/' + 'AllRiders';
+    const url = 'http://localhost:5001/Rider/' + 'AllRiders';
     jest.spyOn(httpClientSpy, 'get').mockReturnValue(of(res));
 
     service.getAllRiders();
