@@ -12,13 +12,17 @@ export class RiderService {
 
   constructor(private http: HttpClient){}
 
-  baseUrl = 'http://localhost:5000/Speedway/';
+  baseUrl = 'http://localhost:5001/Rider';
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
 
   getAllRiders(): Observable<IRider[]>{
-    return this.http.get<IRider[]>(this.baseUrl + 'AllRiders')
+    return this.http.get<IRider[]>(this.baseUrl + '/AllRiders')
+  }
+
+  createNewRider(rider: IRider): Observable<IRider>{
+    return this.http.post<IRider>(this.baseUrl, rider, this.httpOptions)
   }
 }

@@ -6,6 +6,7 @@ import lodash from 'lodash';
 import { NetworkService } from '../../../../network/service/network.service';
 import { IFirstName } from '../../../../network/interfaces/firstName';
 import { ICountry } from '../../../../network/interfaces/country';
+import { RiderService } from '../../../../rider/service/rider.service';
 
 @Component({
   selector: 'app-api-based-event',
@@ -18,7 +19,7 @@ import { ICountry } from '../../../../network/interfaces/country';
 })
 export class ApiBasedEventComponent implements OnInit {
 
-  constructor(private eventService: EventService, private networkService: NetworkService) { }
+  constructor(private eventService: EventService, private networkService: NetworkService, private riderService: RiderService) { }
 
   //private eventService = inject(EventService);
   //private networkService = inject(NetworkService);
@@ -72,6 +73,11 @@ export class ApiBasedEventComponent implements OnInit {
 
   onSave(rs: IRiderStats) {
     rs.isEdit = false;
+    rs.rider.surname = rs.rider.surname[0] + rs.rider.surname.substring(1).toLowerCase();
+    this.riderService.createNewRider(rs.rider).subscribe({
+      next: response => console.log('res: ', response),
+      error: error => console.log(error),
+    })
   }
 
   onCancel(rs: IRiderStats) {
